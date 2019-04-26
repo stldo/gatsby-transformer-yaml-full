@@ -1,0 +1,21 @@
+{
+  "name": "gatsby-transformer-yaml-full",
+  "description": "YAML parser with support for custom types and multiple documents",
+  "version": "0.1.0",
+  "author": "stldo (https://github.com/stldo)",
+  "license": "MIT",
+  "repository": "https://github.com/stldo/gatsby-transformer-yaml-full",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-transformer-plugin",
+    "yaml"
+  ],
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.11"
+  },
+  "peerDependencies": {
+    "gatsby": "2.x"
+  }
+}
