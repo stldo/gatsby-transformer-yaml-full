@@ -4,7 +4,9 @@ YAML parser with support for custom types and multiple documents.
 
 ## Install and configure
 
-`npm install --save gatsby-transformer-yaml-full`
+```bash
+$ npm install --save gatsby-transformer-yaml-full
+```
 
 ### Basic configuration
 
