@@ -1,0 +1,22 @@
+{
+  "name": "gatsby-yaml-full-markdown",
+  "description": "Parses Markdown strings into HTML",
+  "version": "0.1.0",
+  "author": "stldo (https://github.com/stldo)",
+  "license": "MIT",
+  "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "markdown",
+    "yaml"
+  ],
+  "dependencies": {
+    "remark": "^10.0.1",
+    "remark-html": "^9.0.0"
+  },
+  "peerDependencies": {
+    "gatsby": "2.x",
+    "gatsby-transformer-yaml-full": "0.1.x"
+  }
+}
