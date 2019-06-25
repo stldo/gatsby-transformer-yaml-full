@@ -3,7 +3,7 @@ const { camelCase, isPlainObject, upperFirst } = require(`lodash`)
 const path = require(`path`)
 
 const CREATE_NODE_PROPERTIES = ['id', 'parent', 'children', 'internal']
-const MULTI_DOCUMENT_YAML = /^---[\s]*/gm
+const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
 
 const getLinkNodes = (
   { createNode, createParentChildLink },
