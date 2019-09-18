@@ -5,7 +5,7 @@ Plugin for `gatsby-transformer-yaml-full` that converts a path string into a fil
 ## Install and configure
 
 ```bash
-$ npm install --save gatsby-yaml-full-file gatsby-transformer-yaml-full
+$ npm install gatsby-yaml-full-file gatsby-transformer-yaml-full
 ```
 
 __Note:__ this plugin has a peer dependency on `gatsby-source-filesystem@2.x`.
@@ -24,9 +24,9 @@ module.exports = {
           {
             resolve: `gatsby-yaml-full-file`,
             options: {
-              path: './content', // If not set, the base path will be the parent
-            },                   // directory of the YAML file being accessed
-          },
+              path: './content', // If not set, the base path will be the
+            },                   // current directory of the YAML file being
+          },                     // accessed
         ],
       },
     },
