@@ -1,0 +1,19 @@
+{
+  "name": "gatsby-yaml-full-import",
+  "description": "Plugin to enable YAML files importing using !import tag",
+  "version": "0.1.0",
+  "author": "stldo (https://github.com/stldo)",
+  "license": "MIT",
+  "homepage": "https://github.com/stldo/gatsby-yaml-full-import/tree/master/packages/gatsby-yaml-full-import#readme",
+  "repository": "https://github.com/stldo/gatsby-yaml-full-import/tree/master/packages/gatsby-yaml-full-import",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "import",
+    "yaml"
+  ],
+  "peerDependencies": {
+    "gatsby": "2.x",
+    "gatsby-transformer-yaml-full": "0.1.x"
+  }
+}
