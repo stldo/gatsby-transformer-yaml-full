@@ -5,7 +5,7 @@ Plugin for `gatsby-transformer-yaml-full` to parse Markdown strings into HTML.
 ## Install and configure
 
 ```bash
-$ npm install --save gatsby-yaml-full-markdown gatsby-transformer-yaml-full
+$ npm install gatsby-yaml-full-markdown gatsby-transformer-yaml-full
 ```
 
 ### Basic configuration
