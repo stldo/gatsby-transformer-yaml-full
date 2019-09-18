@@ -1,7 +1,7 @@
 {
   "name": "gatsby-yaml-full-markdown",
   "description": "Parses Markdown strings into HTML",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown#readme",
