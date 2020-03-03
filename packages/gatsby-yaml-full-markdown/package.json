@@ -13,8 +13,8 @@
     "yaml"
   ],
   "dependencies": {
-    "remark": "^10.0.1",
-    "remark-html": "^9.0.0"
+    "remark": "^11.0.2",
+    "remark-html": "^10.0.0"
   },
   "peerDependencies": {
     "gatsby": "2.x",
