@@ -15,18 +15,18 @@ $ npm install gatsby-transformer-yaml-full
 
 module.exports = {
   plugins: [
-    `gatsby-transformer-yaml-full`,
+    'gatsby-transformer-yaml-full',
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: 'gatsby-source-filesystem',
       options: {
-        path: `./content`, // Path to your .yaml (or .yml) files
+        path: './content', // Path to your .yaml (or .yml) files
       },
     },
   ],
 }
 ```
 
-__Note:__ `gatsby-transformer-yaml-full` requires a source plugin like
+__Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
 `gatsby-source-filesystem`.
 
 ### Enable custom types using plugins
@@ -41,17 +41,17 @@ You can extend the parser functionality with plugins (e.g.,
 module.exports = {
   plugins: [
     {
-      resolve: `gatsby-transformer-yaml-full`,
+      resolve: 'gatsby-transformer-yaml-full',
       options: {
         plugins: [
-          `gatsby-yaml-full-markdown`, // Enable !markdown tags
+          'gatsby-yaml-full-markdown', // Enable !markdown tags
         ],
       },
     },
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: 'gatsby-source-filesystem',
       options: {
-        path: `./content`,
+        path: './content',
       },
     },
   ],

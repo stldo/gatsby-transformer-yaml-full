@@ -16,10 +16,10 @@ $ npm install gatsby-yaml-full-markdown gatsby-transformer-yaml-full
 module.exports = {
   plugins: [
     {
-      resolve: `gatsby-transformer-yaml-full`,
+      resolve: 'gatsby-transformer-yaml-full',
       options: {
         plugins: [
-          `gatsby-yaml-full-markdown`,
+          'gatsby-yaml-full-markdown',
         ],
       },
     },
