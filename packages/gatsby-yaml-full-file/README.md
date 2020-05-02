@@ -1,6 +1,11 @@
 # gatsby-yaml-full-file
 
-Plugin for `gatsby-transformer-yaml-full` that converts a path string into a file node. It uses `gatsby-source-filesystem` to create the nodes.
+> ⚠️ Warning: This module is deprecated. The default path detection in Gatsby is
+much improved and covers all the cases that this module was intended for, so it
+isn't necessary anymore.
+
+Plugin for `gatsby-transformer-yaml-full` that converts a path string into a
+file node. It uses `gatsby-source-filesystem` to create the nodes.
 
 ## Install and configure
 
@@ -37,7 +42,10 @@ module.exports = {
 
 ## Usage
 
-Use a `!file` tag before a path relative to the YAML file — or the `path` set in plugin options. It uses `gatsby-source-filesystem` to create nodes but, to avoid internal conflicts, `gatsby-transformer-yaml-full` changes the node type to `FileYaml`.
+Use a `!file` tag before a path relative to the YAML file — or the `path` set in
+plugin options. It uses `gatsby-source-filesystem` to create nodes but, to avoid
+internal conflicts, `gatsby-transformer-yaml-full` changes the node type to
+`FileYaml`.
 
 ### Example
 
@@ -83,11 +91,17 @@ image: !file ./images/picture.jpg
 
 ### Options
 
-- __path _(string)_:__ sets a default base path for files, relative to `process.cwd()`
+- __path _(string)_:__ sets a default base path for files, relative to
+`process.cwd()`
 
 ### Accessing `FileYaml` node inside child nodes
 
-This plugin was created because Gatsby can't detect paths in plain arrays and deep nested object trees — those without a parent node. Currently, the implementation of this plugin depends on createChildNodes option set in `gatsby-transformer-yaml-full` — it's automatically enabled. To access a `FileYaml` inside deeply nested nodes, you should access it through the created child nodes.
+This plugin was created because Gatsby can't detect paths in plain arrays and
+deep nested object trees — those without a parent node. Currently, the
+implementation of this plugin depends on createChildNodes option set in
+`gatsby-transformer-yaml-full` — it's automatically enabled. To access a
+`FileYaml` inside deeply nested nodes, you should access it through the created
+child nodes.
 
 #### YAML file
 
