@@ -6,6 +6,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
+    "publish": "lerna publish",
     "version": "lerna version"
   }
 }
