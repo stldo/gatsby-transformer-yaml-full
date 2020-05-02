@@ -5,6 +5,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "outdated": "npm outdated && lerna exec --no-bail -- npm outdated"
+    "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
+    "version": "lerna version"
   }
 }
