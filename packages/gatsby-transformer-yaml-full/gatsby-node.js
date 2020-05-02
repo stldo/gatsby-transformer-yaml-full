@@ -4,11 +4,11 @@ const path = require(`path`)
 
 const self = require('./')
 
-const CAMEL_CASE_REGEXP = /(?:^|[^a-z]+)([a-z])/g
+const CAMEL_CASE_REGEXP = /(?:^|[^a-z0-9]+)([a-z0-9])|[^a-z0-9]+$/g
 
 function camelCase(string) {
   return string.toLowerCase().replace(CAMEL_CASE_REGEXP, (_, char) => {
-    return char.toUpperCase()
+    return char !== undefined ? char.toUpperCase() : ''
   })
 }
 
