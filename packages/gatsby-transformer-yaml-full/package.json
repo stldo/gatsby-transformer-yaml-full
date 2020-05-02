@@ -13,8 +13,8 @@
     "yaml"
   ],
   "dependencies": {
-    "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15"
+    "is-plain-object": "^3.0.0",
+    "js-yaml": "^3.13.1"
   },
   "peerDependencies": {
     "gatsby": "2.x"

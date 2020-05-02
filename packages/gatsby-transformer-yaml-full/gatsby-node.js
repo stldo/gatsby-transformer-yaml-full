@@ -1,53 +1,96 @@
+const isPlainObject = require(`is-plain-object`)
 const jsYaml = require(`js-yaml`)
-const isPlainObject = require(`lodash/isPlainObject`)
 const path = require(`path`)
 
-const helpers = require('./')
+const self = require('./')
 
-exports.onCreateNode = async function (api, { plugins, ...pluginOptions }) {
-  const { node } = api
+const CAMEL_CASE_REGEXP = /(?:^|[^a-z]+)([a-z])/g
+
+function camelCase(string) {
+  return string.toLowerCase().replace(CAMEL_CASE_REGEXP, (_, char) => {
+    return char.toUpperCase()
+  })
+}
+
+exports.onCreateNode = async (helpers, { plugins }) => {
+  const { node } = helpers
 
   if (node.internal.mediaType !== `text/yaml`) {
     return
   }
 
-  const { actions, loadNodeContent, createNodeId, createContentDigest } = api
+  const {
+    actions: { createNode, createParentChildLink },
+    createContentDigest,
+    createNodeId,
+    loadNodeContent
+  } = helpers
+
+  function linkNodes(content, parent, { type = '', index = 0 }) {
+    const node = {
+      ...content,
+      id: createNodeId(`${type}:${index} >>> YAML`),
+      children: [],
+      parent: parent.id
+    }
+
+    node.internal = {
+      contentDigest: createContentDigest(node),
+      type: camelCase(`${type} Yaml`)
+    }
+
+    createNode(node)
+    createParentChildLink({ parent, child: node })
+  }
+
+  async function resolveContent(content) {
+    if (content === Promise.resolve(content)) {
+      content = await Promise.resolve(content)
+    }
+
+    let entries
+
+    if (Array.isArray(content)) {
+      entries = content.entries()
+    } else if (
+      isPlainObject(content) &&
+      !(content.internal && content.internal.type)
+    ) {
+      entries = Object.entries(content)
+    } else {
+      return content
+    }
+
+    for (let [key, value] of entries) {
+      content[key] = await resolveContent(value)
+    }
+
+    return content
+  }
+
   const types = []
 
   for (let { resolve, childOptions = {} } of plugins) {
     const plugin = require(resolve)
-    const { tag, options, transformerOptions } = plugin(
-      api,
-      { ...childOptions, types }
-    )
-
-    if (transformerOptions) {
-      Object.assign(pluginOptions, transformerOptions)
-    }
-
+    const { options, tag } = plugin(helpers, childOptions)
     types.push(new jsYaml.Type(tag, options))
   }
 
-  const nodeContent = (await loadNodeContent(node)) + '\n'
-  const parsedContent = helpers.parse(nodeContent, types)
+  self.configureSchema(types)
 
-  const linkNodes = helpers.generateLinkNodes(
-    actions,
-    createNodeId,
-    createContentDigest,
-    pluginOptions
-  )
+  const nodeContent = (await loadNodeContent(node)) + '\n'
+  const parsedContent = self.parse(nodeContent)
 
   if (Array.isArray(parsedContent)) {
     for (let [index, content] of parsedContent.entries()) {
       if (!isPlainObject(content)) continue
-      const baseType = `${node.relativeDirectory} ${node.name}`
-      const resolvedContent = await helpers.resolveContent(content)
-      linkNodes(resolvedContent, node, { isRoot: true, baseType, index })
+      const type = `${node.relativeDirectory} ${node.name}`
+      const resolvedContent = await resolveContent(content)
+      linkNodes(resolvedContent, node, { type, index })
     }
   } else if (isPlainObject(parsedContent)) {
-    const baseType = path.basename(node.dir)
-    const resolvedContent = await helpers.resolveContent(parsedContent)
-    linkNodes(resolvedContent, node, { isRoot: true, baseType })
+    const type = path.basename(node.dir)
+    const resolvedContent = await resolveContent(parsedContent)
+    linkNodes(resolvedContent, node, { type })
   }
 }
