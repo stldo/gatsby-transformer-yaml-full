@@ -1,31 +1,26 @@
 const fs = require('fs')
+const yamlFull = require('../gatsby-transformer-yaml-full')
 const path = require('path')
 const { promisify } = require('util')
-const yamlFull = require('gatsby-transformer-yaml-full')
 
 const readFile = promisify(fs.readFile)
 
 const SPLIT_REGEXP = / +/
 
-module.exports = ({ node }, { path: basePath, types }) => ({
+module.exports = ({ node }) => ({
   tag: '!import',
   options: {
     kind: 'scalar',
     construct: async function (data) {
       const [filename, params] = data.split(SPLIT_REGEXP)
-
-      const filePath = undefined === basePath
-        ? path.resolve(node.dir, filename)
-        : path.resolve(process.cwd(), basePath, filename)
-
-      const content = (await readFile(filePath, 'utf8')) + '\n'
-      const parsedContent = yamlFull.parse(content, types)
+      const filePath = path.resolve(node.dir, filename)
+      const content = yamlFull.parse((await readFile(filePath, 'utf8')) + '\n')
 
       return !params
-        ? parsedContent
+        ? content
         : params.split('.').reduce((accumulator, param) => (
           accumulator != null && accumulator[param]
-        ), parsedContent)
+        ), content)
     },
   }
 })
