@@ -1,6 +1,7 @@
 # gatsby-yaml-full-import
 
-Plugin for `gatsby-transformer-yaml-full` to enable YAML files importing using !import tag.
+Plugin for `gatsby-transformer-yaml-full` to enable YAML files importing using
+`!import` tag.
 
 ## Install and configure
 
@@ -19,12 +20,7 @@ module.exports = {
       resolve: `gatsby-transformer-yaml-full`,
       options: {
         plugins: [
-          {
-            resolve: `gatsby-yaml-full-import`,
-            options: {
-              path: './content', // If not set, the base path will be the
-            },                   // current directory of the YAML file being
-          },                     // accessed
+          `gatsby-yaml-full-import`
         ],
       },
     },
@@ -39,24 +35,16 @@ Use the `!import` tag to import the content of a YAML file inside a property.
 
 ### Importing YAML data from another file
 
-#### Folder structure
-
-```
-content/
-  index.yaml
-  post.yaml
-```
-
 #### YAML files
 
 ```yaml
-# content/post.yaml
+# post.yaml
 
 title: Post title
 ```
 
 ```yaml
-# content/index.yaml
+# index.yaml
 
 importedPost: !import ./post.yaml
 ```
@@ -73,18 +61,10 @@ importedPost: !import ./post.yaml
 
 ### Importing a specific field
 
-#### Folder structure
-
-```
-content/
-  index.yaml
-  post.yaml
-```
-
 #### YAML files
 
 ```yaml
-# content/post.yaml
+# post.yaml
 
 authors:
 - name: John Doe
@@ -92,7 +72,7 @@ authors:
 ```
 
 ```yaml
-# content/index.yaml
+# index.yaml
 
 importedAuthorName: !import ./post.yaml authors.0.name
 ```
@@ -104,9 +84,3 @@ importedAuthorName: !import ./post.yaml authors.0.name
   importedAuthorName: 'John Doe'
 }
 ```
-
-## Additional information
-
-### Options
-
-- __path _(string)_:__ sets a default base path for files, relative to `process.cwd()`
