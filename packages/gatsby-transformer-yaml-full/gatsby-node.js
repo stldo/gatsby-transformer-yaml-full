@@ -26,10 +26,10 @@ exports.onCreateNode = async (helpers, { plugins }) => {
     loadNodeContent
   } = helpers
 
-  function linkNodes(content, parent, { type = '', index = 0 }) {
+  function linkNodes({ id, ...content }, parent, { type = '', index = 0 }) {
     const node = {
       ...content,
-      id: createNodeId(`${type}:${index} >>> YAML`),
+      id: id ? id : createNodeId(`${parent.id}:${index} >>> YAML`),
       children: [],
       parent: parent.id
     }
