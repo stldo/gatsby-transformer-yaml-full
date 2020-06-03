@@ -8,20 +8,35 @@ const readFile = promisify(fs.readFile)
 
 const NEWLINE_REGEXP = /\r|\n/
 
-module.exports = ({ node }) => ({
+module.exports = ({ node }, { unwrapSingleLine = true }) => ({
   tag: '!markdown',
   options: {
     kind: 'scalar',
     construct: async data => {
-      if (!NEWLINE_REGEXP.test(data)) {
+      const isSingleLine = !NEWLINE_REGEXP.test(data)
+      let wasLoadedFromFile = false
+
+      if (isSingleLine) {
         const filePath = path.resolve(node.dir, data)
-        data = await readFile(filePath, 'utf8').catch(error => {
-          if (error.code === 'ENOENT') return data
-          throw error
-        })
+
+        data = await readFile(filePath, 'utf8')
+          .then(data => {
+            wasLoadedFromFile = true
+            return data
+          })
+          .catch(error => {
+            if (error.code === 'ENOENT') {
+              return data
+            }
+            throw error
+          })
       }
 
-      return (await remark().use(remarkHtml).process(data)).contents
+      const html = (await remark().use(remarkHtml).process(data)).contents
+
+      return isSingleLine && !wasLoadedFromFile && unwrapSingleLine
+        ? html.slice(3, -5)
+        : html
     },
   },
 })
