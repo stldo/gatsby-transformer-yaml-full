@@ -2,13 +2,15 @@
 
 YAML parser with support for custom types and multiple documents.
 
-## Install and configure
+## Install
 
 ```bash
 $ npm install gatsby-transformer-yaml-full
 ```
 
-### Basic configuration
+## Configure
+
+### Using with gatsby-source-filesystem
 
 ```javascript
 // gatsby-config.js
@@ -29,7 +31,7 @@ module.exports = {
 __Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
 `gatsby-source-filesystem`.
 
-### Enable custom types using plugins
+### Enable custom types with plugins
 
 You can extend the parser functionality with plugins (e.g.,
 [gatsby-yaml-full-markdown](https://github.com/stldo/gatsby-yaml-full-markdown)
@@ -57,6 +59,15 @@ module.exports = {
   ],
 }
 ```
+
+## Options
+
+### plugins
+
+Default: `[]`. Type: `Array`.
+
+Enable specific YAML types (e.g. `gatsby-yaml-full-import` or
+`gatsby-yaml-full-markdown`)
 
 ## Usage
 
@@ -231,13 +242,6 @@ Would return:
   content: '<h2>Heading</h2>\n<p>Article content.</p>\n',
 }
 ```
-
-## Additional information
-
-### Options
-
-- __plugins _(array)_:__ sets the plugins to be enabled by
-`gatsby-transformer-yaml-full`
 
 ### Writing plugins
 

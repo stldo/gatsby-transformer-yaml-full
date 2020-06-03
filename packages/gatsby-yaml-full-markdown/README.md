@@ -2,13 +2,13 @@
 
 Plugin for `gatsby-transformer-yaml-full` to parse Markdown strings into HTML.
 
-## Install and configure
+## Install
 
 ```bash
 $ npm install gatsby-yaml-full-markdown gatsby-transformer-yaml-full
 ```
 
-### Basic configuration
+## Configure
 
 ```javascript
 // gatsby-config.js
@@ -19,7 +19,12 @@ module.exports = {
       resolve: 'gatsby-transformer-yaml-full',
       options: {
         plugins: [
-          'gatsby-yaml-full-markdown',
+          {
+            resolve: 'gatsby-yaml-full-markdown',
+            options: {
+              unwrapSingleLine: true
+            }
+          }
         ],
       },
     },
@@ -27,6 +32,15 @@ module.exports = {
   ],
 }
 ```
+
+## Options
+
+### unwrapSingleLine
+
+Default: `true`. Type: `boolean`.
+
+If the value has a single line and wasn't [loaded from a file](#yaml-file), then
+remove the `<p>` element wrapping the string.
 
 ## Usage
 
