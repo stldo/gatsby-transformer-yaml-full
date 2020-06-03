@@ -4,8 +4,8 @@
   "version": "0.3.1",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
-  "homepage": "https://github.com/stldo/gatsby-yaml-full-import/tree/master/packages/gatsby-yaml-full-import#readme",
-  "repository": "https://github.com/stldo/gatsby-yaml-full-import/tree/master/packages/gatsby-yaml-full-import",
+  "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import#readme",
+  "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import",
   "keywords": [
     "gatsby",
     "gatsby-plugin",
