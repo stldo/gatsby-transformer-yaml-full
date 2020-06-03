@@ -70,9 +70,9 @@ exports.onCreateNode = async (helpers, { plugins }) => {
 
   const types = []
 
-  for (let { resolve, childOptions = {} } of plugins) {
+  for (let { resolve, pluginOptions } of plugins) {
     const plugin = require(resolve)
-    const { options, tag } = plugin(helpers, childOptions)
+    const { options, tag } = plugin(helpers, pluginOptions)
     types.push(new jsYaml.Type(tag, options))
   }
 
