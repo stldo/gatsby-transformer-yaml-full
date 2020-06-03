@@ -3,13 +3,13 @@
 Plugin for `gatsby-transformer-yaml-full` to enable YAML files importing using
 `!import` tag.
 
-## Install and configure
+## Install
 
 ```bash
 $ npm install gatsby-yaml-full-import gatsby-transformer-yaml-full
 ```
 
-### Basic configuration
+## Configure
 
 ```javascript
 // gatsby-config.js
