@@ -25,7 +25,7 @@ module.exports = ({ node }, { unwrapSingleLine = true }) => ({
             return data
           })
           .catch(error => {
-            if (error.code === 'ENOENT') {
+            if (error.code === 'ENOENT' || error.code === 'ENAMETOOLONG') {
               return data
             }
             throw error
