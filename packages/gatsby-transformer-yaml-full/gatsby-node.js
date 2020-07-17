@@ -73,7 +73,8 @@ exports.onCreateNode = async (helpers, { plugins }) => {
   for (let {resolve, pluginOptions} of plugins) {
     const plugin = require(resolve);
     const results = plugin(helpers, pluginOptions);
-    // The module may return a single type, or an Array of types
+    
+    // The plugin function may return a single type, or an array of types
     for (let {options, tag} of Array.isArray(results) ? results : [results]) {
       types.push(new jsYaml.Type(tag, options));
     }
