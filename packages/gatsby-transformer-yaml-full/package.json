@@ -13,7 +13,7 @@
     "yaml"
   ],
   "dependencies": {
-    "is-plain-object": "^3.0.0",
+    "is-plain-object": "^3.0.1",
     "js-yaml": "^3.14.0"
   },
   "peerDependencies": {
