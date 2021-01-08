@@ -1,6 +1,6 @@
-const isPlainObject = require(`is-plain-object`)
-const jsYaml = require(`js-yaml`)
-const path = require(`path`)
+const { isPlainObject } = require('is-plain-object')
+const jsYaml = require('js-yaml')
+const path = require('path')
 
 const self = require('./')
 
@@ -15,7 +15,7 @@ function camelCase(string) {
 exports.onCreateNode = async (helpers, { plugins }) => {
   const { node } = helpers
 
-  if (node.internal.mediaType !== `text/yaml`) {
+  if (node.internal.mediaType !== 'text/yaml') {
     return
   }
 
