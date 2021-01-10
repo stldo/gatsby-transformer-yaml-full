@@ -31,12 +31,11 @@ exports.onCreateNode = async (helpers, { plugins }) => {
       ...content,
       id: id ? id : createNodeId(`${node.id}:${index} >>> YAML`),
       children: [],
-      parent: node.id
-    }
-
-    child.internal = {
-      contentDigest: createContentDigest(child),
-      type: camelCase(`${type} Yaml`)
+      parent: node.id,
+      internal: {
+        contentDigest: createContentDigest(id ? { id, ...content } : content),
+        type: camelCase(`${type} Yaml`)
+      }
     }
 
     createNode(child)
