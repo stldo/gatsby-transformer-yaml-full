@@ -252,7 +252,7 @@ following properties:
 - __options:__ passed to [JS-YAML](https://github.com/nodeca/js-yaml) `Type`
 constructor (i.e. https://github.com/nodeca/js-yaml/wiki/Custom-types)
 
-The first argument of the function will be the helpers object received from
+The first argument of the function will be the `helpers` object received from
 Gatsby on `exports.onCreateNode`. The second will be the plugin options object
 set in `gatsby-config.js`.
 
@@ -269,3 +269,7 @@ module.exports = function ({ node }, pluginOptions) {
   }
 }
 ```
+
+More information about creating local plugins, specific to your project, can be
+found on
+[Gatsby documentation](https://www.gatsbyjs.com/docs/creating-a-local-plugin).
