@@ -26,14 +26,18 @@ exports.onCreateNode = async (helpers, { plugins }) => {
     loadNodeContent
   } = helpers
 
-  function linkNodes({ id, ...content }, { type = '', index = 0 }) {
+  function linkNodes(content, { type = '', index = 0 }) {
+    const id = 'id' in content
+      ? content.id
+      : createNodeId(`${node.id}:${index} >>> YAML`)
+
     const child = {
       ...content,
-      id: id ? id : createNodeId(`${node.id}:${index} >>> YAML`),
+      id,
       children: [],
       parent: node.id,
       internal: {
-        contentDigest: createContentDigest(id ? { id, ...content } : content),
+        contentDigest: createContentDigest(content),
         type: camelCase(`${type} Yaml`)
       }
     }
