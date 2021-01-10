@@ -26,21 +26,21 @@ exports.onCreateNode = async (helpers, { plugins }) => {
     loadNodeContent
   } = helpers
 
-  function linkNodes({ id, ...content }, parent, { type = '', index = 0 }) {
-    const node = {
+  function linkNodes({ id, ...content }, { type = '', index = 0 }) {
+    const child = {
       ...content,
-      id: id ? id : createNodeId(`${parent.id}:${index} >>> YAML`),
+      id: id ? id : createNodeId(`${node.id}:${index} >>> YAML`),
       children: [],
-      parent: parent.id
+      parent: node.id
     }
 
-    node.internal = {
-      contentDigest: createContentDigest(node),
+    child.internal = {
+      contentDigest: createContentDigest(child),
       type: camelCase(`${type} Yaml`)
     }
 
-    createNode(node)
-    createParentChildLink({ parent, child: node })
+    createNode(child)
+    createParentChildLink({ parent: node, child })
   }
 
   async function resolveContent(content) {
@@ -90,11 +90,11 @@ exports.onCreateNode = async (helpers, { plugins }) => {
       if (!isPlainObject(content)) continue
       const type = `${node.relativeDirectory} ${node.name}`
       const resolvedContent = await resolveContent(content)
-      linkNodes(resolvedContent, node, { type, index })
+      linkNodes(resolvedContent, { type, index })
     }
   } else if (isPlainObject(parsedContent)) {
     const type = path.basename(node.dir)
     const resolvedContent = await resolveContent(parsedContent)
-    linkNodes(resolvedContent, node, { type })
+    linkNodes(resolvedContent, { type })
   }
 }
