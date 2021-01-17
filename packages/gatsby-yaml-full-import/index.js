@@ -1,26 +1,42 @@
-const fs = require('fs')
-const yamlFull = require('../gatsby-transformer-yaml-full')
-const path = require('path')
-const { promisify } = require('util')
+const PARAMS_REGEXP = /(.+?)(?:\s+(\S+)|\s*)$/
 
-const readFile = promisify(fs.readFile)
-
-const SPLIT_REGEXP = / +/
-
-module.exports = ({ node }) => ({
+module.exports = ({ getNode, getNodes, loadNodeContent, node, reporter }) => ({
   tag: '!import',
   options: {
     kind: 'scalar',
     construct: async function (data) {
-      const [filename, params] = data.split(SPLIT_REGEXP)
-      const filePath = path.resolve(node.dir, filename)
-      const content = yamlFull.parse((await readFile(filePath, 'utf8')) + '\n')
+      const [_, filename, fields] = PARAMS_REGEXP.exec(data)
+      const [importedNode] = getNodes().filter(({ relativePath }) => (
+        relativePath === filename
+      ))
 
-      return !params
-        ? content
-        : params.split('.').reduce((accumulator, param) => (
-          accumulator != null && accumulator[param]
-        ), content)
-    },
+      if (!importedNode) {
+        reporter.error(
+          `"!import ${filename}" not found in "${node.relativePath}"`
+        )
+        return null
+      }
+
+      await loadNodeContent(importedNode)
+      const content = getNode(importedNode.children[0])
+
+      if (!fields) {
+        return content
+      }
+
+      let warningWasPrinted = false
+
+      return fields.split('.').reduce((accumulator, field) => {
+        if (accumulator && field in accumulator) {
+          return accumulator[field]
+        } else if (!warningWasPrinted) {
+          reporter.error(
+            `"${fields}" doesn't exist in "!import ${filename}"`
+          )
+          warningWasPrinted = true
+        }
+        return null
+      }, content)
+    }
   }
 })
