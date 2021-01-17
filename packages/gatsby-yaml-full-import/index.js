@@ -1,3 +1,5 @@
+const { utimes, watch } = require('fs')
+
 const PARAMS_REGEXP = /(.+?)(?:\s+(\S+)|\s*)$/
 
 module.exports = ({ getNode, getNodes, loadNodeContent, node, reporter }) => ({
@@ -16,6 +18,12 @@ module.exports = ({ getNode, getNodes, loadNodeContent, node, reporter }) => ({
         )
         return null
       }
+
+      watch(importedNode.absolutePath, () => {
+        const time = new Date()
+        node.internal.contentDigest = ''
+        utimes(node.absolutePath, time, time, () => {})
+      })
 
       await loadNodeContent(importedNode)
       const content = getNode(importedNode.children[0])
