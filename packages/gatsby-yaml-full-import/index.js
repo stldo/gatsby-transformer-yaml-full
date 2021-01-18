@@ -2,19 +2,26 @@ const path = require('path')
 
 const watcher = require('./lib/watcher')
 
-const PARAMS_REGEXP = /(.+?)(?:\s+(\S+)|\s*)$/
-
 module.exports = helpers => ({
   tag: '!import',
   options: {
     kind: 'scalar',
     construct: async data => {
       const { getNode, getNodes, loadNodeContent, node, reporter } = helpers
-      const [_, importPath, importField] = PARAMS_REGEXP.exec(data)
+      const [importPath, importField] = data.split('!')
       const importAbsolutePath = path.resolve(node.dir, importPath)
       const [importNode] = getNodes().filter(({ absolutePath }) => (
         absolutePath === importAbsolutePath
       ))
+
+      if (!importField && data.split(' ').length) {
+        reporter.error( // TODO Remove this message on > 0.5.0
+          `[gatsby-yaml-full-import] Separate file name from field name with ` +
+          `spaces is deprecated. Instead, use an exclamation mark in ` +
+          `"${node.relativePath}", i.e. "${data.replace(/ +/, '!')}".`
+        )
+        return null
+      }
 
       if (!importNode) {
         reporter.error(
