@@ -61,6 +61,8 @@ importedPost: !import ./post.yaml
 
 ### Importing a specific field
 
+Use an exclamation mark (`!`) to separate file name from field names.
+
 #### YAML files
 
 ```yaml
@@ -74,7 +76,7 @@ authors:
 ```yaml
 # index.yaml
 
-importedAuthorName: !import ./post.yaml authors.0.name
+importedAuthorName: !import ./post.yaml!authors.0.name
 ```
 
 #### Returning object
