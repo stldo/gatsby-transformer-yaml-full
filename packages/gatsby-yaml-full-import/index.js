@@ -1,3 +1,5 @@
+const path = require('path')
+
 const watcher = require('./lib/watcher')
 
 const PARAMS_REGEXP = /(.+?)(?:\s+(\S+)|\s*)$/
@@ -6,11 +8,12 @@ module.exports = helpers => ({
   tag: '!import',
   options: {
     kind: 'scalar',
-    construct: async function (data) {
+    construct: async data => {
       const { getNode, getNodes, loadNodeContent, node, reporter } = helpers
       const [_, importPath, importField] = PARAMS_REGEXP.exec(data)
-      const [importNode] = getNodes().filter(({ relativePath }) => (
-        relativePath === importPath
+      const importAbsolutePath = path.resolve(node.dir, importPath)
+      const [importNode] = getNodes().filter(({ absolutePath }) => (
+        absolutePath === importAbsolutePath
       ))
 
       if (!importNode) {
@@ -23,7 +26,7 @@ module.exports = helpers => ({
       await loadNodeContent(importNode)
 
       if (process.env.NODE_ENV === 'development') {
-        await watcher.add(helpers, importNode.absolutePath, node.absolutePath)
+        await watcher.add(helpers, importAbsolutePath, node.absolutePath)
       }
 
       const content = getNode(importNode.children[0])
