@@ -1,42 +1,70 @@
-const fs = require('fs')
+const { readFile } = require('fs/promises')
+const { isPlainObject } = require('is-plain-object')
 const path = require('path')
-const remark = require('remark')
-const remarkHtml = require('remark-html')
-const { promisify } = require('util')
+const rehypeSanitize = require('rehype-sanitize')
+const rehypeStringify = require('rehype-stringify')
+const remarkParse = require('remark-parse')
+const remarkRehype = require('remark-rehype')
+const unified = require('unified')
 
-const readFile = promisify(fs.readFile)
+const NEWLINE_REGEXP = /\n|\r/
+const UNWRAP_REGEXP = /^<p>|<\/p>$/g
 
-const NEWLINE_REGEXP = /\r|\n/
+module.exports = (
+  { node },
+  { rehypePlugins = true, unwrapSingleLine = true }
+) => {
+  if (rehypePlugins === false) {
+    rehypePlugins = []
+    unwrapSingleLine = false
+  } else if (isPlainObject(rehypePlugins)) {
+    const { sanitize, stringify } = rehypePlugins
+    rehypePlugins = [[rehypeSanitize, sanitize], [rehypeStringify, stringify]]
+  } else if (!Array.isArray(rehypePlugins)) {
+    rehypePlugins = [[rehypeSanitize], [rehypeStringify]]
+  } else {
+    unwrapSingleLine = false
+  }
 
-module.exports = ({ node }, { unwrapSingleLine = true }) => ({
-  tag: '!markdown',
-  options: {
-    kind: 'scalar',
-    construct: async data => {
-      const isSingleLine = !NEWLINE_REGEXP.test(data)
-      let wasLoadedFromFile = false
+  return {
+    tag: '!markdown',
+    options: {
+      kind: 'scalar',
+      construct: async data => {
+        let unwrapParagraph = unwrapSingleLine
 
-      if (isSingleLine) {
-        const filePath = path.resolve(node.dir, data)
-
-        data = await readFile(filePath, 'utf8')
-          .then(data => {
-            wasLoadedFromFile = true
-            return data
-          })
-          .catch(error => {
-            if (error.code === 'ENOENT' || error.code === 'ENAMETOOLONG') {
-              return data
+        if (!NEWLINE_REGEXP.test(data)) { // If data is single line
+          await readFile(path.resolve(node.dir, data), 'utf8').then(content => {
+            unwrapParagraph = false
+            data = content
+          }).catch(error => {
+            if (error.code !== 'ENOENT' && error.code !== 'ENAMETOOLONG') {
+              throw error
             }
-            throw error
           })
+        } else {
+          unwrapParagraph = false
+        }
+
+        const processor = unified()
+
+        processor.use(remarkParse)
+        processor.use(remarkRehype)
+
+        for (const [plugin, options = null] of rehypePlugins) {
+          if (options === false) {
+            continue
+          } else if (options === null) {
+            processor.use(plugin)
+          } else {
+            processor.use(plugin, options)
+          }
+        }
+
+        const content = (await processor.process(data)).contents
+
+        return unwrapParagraph ? content.replace(UNWRAP_REGEXP, '') : content
       }
-
-      const html = (await remark().use(remarkHtml).process(data)).contents
-
-      return isSingleLine && !wasLoadedFromFile && unwrapSingleLine
-        ? html.slice(3, -5)
-        : html
-    },
-  },
-})
+    }
+  }
+}
