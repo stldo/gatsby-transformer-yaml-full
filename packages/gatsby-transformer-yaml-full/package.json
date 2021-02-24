@@ -15,8 +15,5 @@
   "dependencies": {
     "is-plain-object": "^5.0.0",
     "js-yaml": "^4.0.0"
-  },
-  "peerDependencies": {
-    "gatsby": "2.x"
   }
 }
