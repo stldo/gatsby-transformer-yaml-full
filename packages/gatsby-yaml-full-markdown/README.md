@@ -1,5 +1,9 @@
 # gatsby-yaml-full-markdown
 
+> ⚠️ __Warning__: Starting in version 0.4.0, this plugin will not convert the
+> markdown content to HTML anymore, requiring another plugin (e.g.
+> `gatsby-transformer-remark` or `gatsby-plugin-mdx`) to do the conversion.
+
 Plugin for `gatsby-transformer-yaml-full` to convert strings to Markdown nodes.
 
 ## Install
