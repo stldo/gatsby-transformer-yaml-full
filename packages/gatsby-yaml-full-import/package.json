@@ -11,9 +11,5 @@
     "gatsby-plugin",
     "import",
     "yaml"
-  ],
-  "peerDependencies": {
-    "gatsby": "2.x",
-    "gatsby-transformer-yaml-full": "0.3.x"
-  }
+  ]
 }
