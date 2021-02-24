@@ -21,12 +21,8 @@ function linkMarkdownNodes (node, isNodeRoot = true) {
 }
 
 exports.onCreateNode = ({ node }) => {
-  if (
-    node.internal.owner !== 'gatsby-transformer-yaml-full' ||
-    node.internal.type === 'YamlMarkdown'
-  ) {
-    return
+  const { owner, type } = node.internal
+  if (owner === 'gatsby-transformer-yaml-full' && type !== 'YamlMarkdown') {
+    linkMarkdownNodes(node)
   }
-
-  linkMarkdownNodes(node)
 }
