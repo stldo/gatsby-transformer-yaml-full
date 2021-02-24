@@ -50,7 +50,7 @@ exports.onCreateNode = async (helpers, { plugins }) => {
       : jsYaml.DEFAULT_SCHEMA
   }
 
-  function linkNodes(content, { type = '', index = 0 }) {
+  async function linkNodes(content, { type = '', index = 0 }) {
     const id = 'id' in content
       ? content.id
       : createNodeId(`${node.id}:${index} >>> YAML`)
@@ -66,7 +66,7 @@ exports.onCreateNode = async (helpers, { plugins }) => {
       }
     }
 
-    createNode(child)
+    await createNode(child)
     createParentChildLink({ parent: node, child })
   }
 
@@ -103,11 +103,11 @@ exports.onCreateNode = async (helpers, { plugins }) => {
       if (!isPlainObject(content)) continue
       const type = `${node.relativeDirectory} ${node.name}`
       const resolvedContent = await resolveContent(content)
-      linkNodes(resolvedContent, { type, index })
+      await linkNodes(resolvedContent, { type, index })
     }
   } else if (isPlainObject(yaml)) {
     const type = path.basename(node.dir)
     const resolvedContent = await resolveContent(yaml)
-    linkNodes(resolvedContent, { type })
+    await linkNodes(resolvedContent, { type })
   }
 }
