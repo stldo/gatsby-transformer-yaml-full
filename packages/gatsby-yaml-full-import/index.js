@@ -2,6 +2,8 @@ const path = require('path')
 
 const watcher = require('./lib/watcher')
 
+const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
+
 module.exports = helpers => ({
   tag: '!import',
   options: {
@@ -36,24 +38,29 @@ module.exports = helpers => ({
         await watcher.add(helpers, importAbsolutePath, node.absolutePath)
       }
 
-      const content = getNode(importNode.children[0])
+      const importNodeContent = importNode.internal.content
+      const content = importNodeContent.search(MULTI_DOCUMENT_YAML) !== -1
+        ? importNode.children.map(id => getNode(id))
+        : getNode(importNode.children[0])
 
       if (!importField) {
         return content
       }
 
-      let warningWasPrinted = false
+      let errorWasPrinted = false
 
       return importField.split('.').reduce((accumulator, field) => {
         if (accumulator && field in accumulator) {
           return accumulator[field]
-        } else if (!warningWasPrinted) {
-          reporter.error(
-            `"${importField}" doesn't exist in "!import ${importPath}"`
-          )
-          warningWasPrinted = true
+        } else if (errorWasPrinted) {
+          return null
         }
-        return null
+
+        reporter.error(
+          `"${importField}" doesn't exist in "!import ${importPath}"`
+        )
+
+        errorWasPrinted = true
       }, content)
     }
   }
