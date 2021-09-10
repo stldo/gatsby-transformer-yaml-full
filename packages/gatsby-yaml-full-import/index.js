@@ -16,15 +16,6 @@ module.exports = helpers => ({
         absolutePath === importAbsolutePath
       ))
 
-      if (!importField && data.split(' ').length) {
-        reporter.error( // TODO Remove this message on > 0.5.0
-          `[gatsby-yaml-full-import] Separate file name from field name with ` +
-          `spaces is deprecated. Instead, use an exclamation mark in ` +
-          `"${node.relativePath}", i.e. "${data.replace(/ +/, '!')}".`
-        )
-        return null
-      }
-
       if (!importNode) {
         reporter.error(
           `"!import ${importPath}" not found in "${node.relativePath}"`
