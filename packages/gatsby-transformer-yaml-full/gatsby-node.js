@@ -71,25 +71,16 @@ exports.onCreateNode = async (helpers, { plugins }) => {
   }
 
   async function resolveContent(content) {
-    if (content === Promise.resolve(content)) {
-      content = await Promise.resolve(content)
-    }
-
-    let entries
+    content = await content
 
     if (Array.isArray(content)) {
-      entries = content.entries()
-    } else if (
-      isPlainObject(content) &&
-      !(content.internal && content.internal.type)
-    ) {
-      entries = Object.entries(content)
-    } else {
-      return content
-    }
-
-    for (let [key, value] of entries) {
-      content[key] = await resolveContent(value)
+      for (const index = 0; index < content.length; index++) {
+        content[index] = await resolveContent(content[index])
+      }
+    } else if (isPlainObject(content) && !content.internal?.type) {
+      for (const [key, value] of Object.entries(content)) {
+        content[key] = await resolveContent(value)
+      }
     }
 
     return content
@@ -100,14 +91,17 @@ exports.onCreateNode = async (helpers, { plugins }) => {
 
   if (Array.isArray(yaml)) {
     for (let [index, content] of yaml.entries()) {
-      if (!isPlainObject(content)) continue
-      const type = `${node.relativeDirectory} ${node.name}`
-      const resolvedContent = await resolveContent(content)
-      await linkNodes(resolvedContent, { type, index })
+      if (isPlainObject(content)) {
+        const type = `${node.relativeDirectory} ${node.name}`
+        const resolvedContent = await resolveContent(content)
+
+        await linkNodes(resolvedContent, { type, index })
+      }
     }
   } else if (isPlainObject(yaml)) {
     const type = path.basename(node.dir)
     const resolvedContent = await resolveContent(yaml)
+
     await linkNodes(resolvedContent, { type })
   }
 }
