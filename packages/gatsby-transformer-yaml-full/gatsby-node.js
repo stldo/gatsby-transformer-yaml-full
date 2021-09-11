@@ -74,7 +74,7 @@ exports.onCreateNode = async (helpers, { plugins }) => {
     content = await content
 
     if (Array.isArray(content)) {
-      for (const index = 0; index < content.length; index++) {
+      for (let index = 0; index < content.length; index++) {
         content[index] = await resolveContent(content[index])
       }
     } else if (isPlainObject(content) && !content.internal?.type) {
