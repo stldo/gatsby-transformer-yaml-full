@@ -11,5 +11,8 @@
     "gatsby-plugin",
     "import",
     "yaml"
-  ]
+  ],
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
 }
