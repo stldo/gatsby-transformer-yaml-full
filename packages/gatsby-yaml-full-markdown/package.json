@@ -1,7 +1,7 @@
 {
   "name": "gatsby-yaml-full-markdown",
   "description": "Convert strings to Markdown nodes",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown#readme",
