@@ -33,9 +33,8 @@ __Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
 
 ### Enable custom types with plugins
 
-You can extend the parser functionality with plugins (e.g.,
-[gatsby-yaml-full-markdown](https://github.com/stldo/gatsby-yaml-full-markdown)
-).
+You can extend the parser functionality with plugins (e.g.
+[gatsby-yaml-full-markdown][1]).
 
 ```javascript
 // gatsby-config.js
@@ -248,9 +247,8 @@ Would return:
 The plugin should return a function, which should return an object with the
 following properties:
 
-- __tag _(string)_:__ the tag of the new type (e.g., `!markdown`, `!file`)
-- __options:__ passed to [JS-YAML](https://github.com/nodeca/js-yaml) `Type`
-constructor (i.e. https://github.com/nodeca/js-yaml/wiki/Custom-types)
+- __tag _(string)_:__ the tag of the new type (e.g. `!import`, `!markdown`)
+- __options:__ passed to JS-YAML [Type][2] constructor
 
 The first argument of the function will be the `helpers` object received from
 Gatsby on `exports.onCreateNode`. The second will be the plugin options object
@@ -271,5 +269,13 @@ module.exports = function ({ node }, pluginOptions) {
 ```
 
 More information about creating local plugins, specific to your project, can be
-found on
-[Gatsby documentation](https://www.gatsbyjs.com/docs/creating-a-local-plugin).
+found on [Gatsby documentation][3].
+
+## License
+
+[The MIT License][L]
+
+[1]: https://github.com/stldo/gatsby-yaml-full-markdown
+[2]: https://github.com/nodeca/js-yaml/blob/master/lib/type.js
+[3]: https://www.gatsbyjs.com/docs/creating-a-local-plugin
+[L]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE

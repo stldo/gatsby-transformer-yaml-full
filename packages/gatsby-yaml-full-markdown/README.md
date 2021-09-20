@@ -1,9 +1,5 @@
 # gatsby-yaml-full-markdown
 
-> ⚠️ __Warning__: Starting in version 0.4.0, this plugin will not convert the
-> markdown content to HTML anymore, requiring another plugin (e.g.
-> `gatsby-transformer-remark` or `gatsby-plugin-mdx`) to do the conversion.
-
 Plugin for `gatsby-transformer-yaml-full` to convert strings to Markdown nodes.
 
 ## Install
@@ -37,9 +33,8 @@ module.exports = {
 ## Usage
 
 Using the `!markdown` tag before a string converts the field to a Markdown media
-type node. If the string is a file path, the file content will used. Use a
-Markdown plugin to process the generated nodes, like `gatsby-transformer-remark`
-or `gatsby-plugin-mdx`.
+type node. If the string is a file path, the file content will be used. Use a
+Markdown plugin like `gatsby-transformer-remark` to transform the nodes.
 
 ### Example
 
@@ -94,3 +89,9 @@ data: {
   }
 }
 ```
+
+## License
+
+[The MIT License][L]
+
+[L]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
