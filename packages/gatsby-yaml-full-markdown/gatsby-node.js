@@ -6,7 +6,10 @@ function linkMarkdownNodes (node) {
   for (const key in node) {
     if (GATSBY_FIELDS.includes(key) || !isPlainObject(node[key])) {
       continue
-    } else if (node[key].internal?.type !== 'YamlMarkdown') {
+    } else if (
+      !node[key].internal ||
+      node[key].internal.type !== 'YamlMarkdown'
+    ) {
       linkMarkdownNodes(node[key])
       continue
     }
