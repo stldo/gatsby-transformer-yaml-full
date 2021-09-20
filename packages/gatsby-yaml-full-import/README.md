@@ -86,3 +86,9 @@ importedAuthorName: !import ./post.yaml!authors.0.name
   importedAuthorName: 'John Doe'
 }
 ```
+
+## License
+
+[The MIT License][L]
+
+[L]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
