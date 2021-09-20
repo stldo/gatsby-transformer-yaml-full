@@ -273,9 +273,9 @@ found on [Gatsby documentation][3].
 
 ## License
 
-[The MIT License][L]
+[The MIT License][license]
 
-[1]: https://github.com/stldo/gatsby-yaml-full-markdown
+[1]: https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown
 [2]: https://github.com/nodeca/js-yaml/blob/master/lib/type.js
 [3]: https://www.gatsbyjs.com/docs/creating-a-local-plugin
-[L]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
+[license]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE

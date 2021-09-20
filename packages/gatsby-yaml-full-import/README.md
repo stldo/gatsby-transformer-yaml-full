@@ -89,6 +89,6 @@ importedAuthorName: !import ./post.yaml!authors.0.name
 
 ## License
 
-[The MIT License][L]
+[The MIT License][license]
 
-[L]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
+[license]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE

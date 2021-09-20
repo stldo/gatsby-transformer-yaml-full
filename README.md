@@ -10,9 +10,9 @@ YAML parser with support for custom types and multiple documents.
 
 ## License
 
-[The MIT License][L]
+[The MIT License][license]
 
 [1]: ./packages/gatsby-transformer-yaml-full
 [2]: ./packages/gatsby-yaml-full-import
 [3]: ./packages/gatsby-yaml-full-markdown
-[L]: ./LICENSE
+[license]: ./LICENSE
