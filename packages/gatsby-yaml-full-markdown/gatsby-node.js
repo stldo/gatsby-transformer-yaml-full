@@ -27,12 +27,8 @@ exports.onCreateNode = ({ node }) => {
   }
 }
 
-exports.onPreBootstrap = ({
-  actions: { setPageData, touchNode },
-  getNodesByType
-}) => {
+exports.onPreBootstrap = ({ actions: { touchNode }, getNodesByType }) => {
   for (const node of getNodesByType('YamlMarkdown')) {
-    // If setPageData exist, then it's Gatsby v2
-    touchNode(!setPageData ? node : { nodeId: node.id })
+    touchNode(node)
   }
 }

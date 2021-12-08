@@ -5,6 +5,9 @@ const path = require('path')
 const CAMEL_CASE_REGEXP = /(?:^|[^a-z0-9]+)([a-z0-9])|[^a-z0-9]+$/g
 const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
 
+const eventsCache = {}
+const pluginsCache = {}
+
 function camelCase(string) {
   return string.toLowerCase().replace(CAMEL_CASE_REGEXP, (_, char) => {
     return char !== undefined ? char.toUpperCase() : ''
@@ -18,8 +21,18 @@ function loadYaml(content, schema) {
     : jsYaml.load(content, { schema })
 }
 
-exports.onCreateNode = async (helpers, { plugins }) => {
-  const { node } = helpers
+async function runCachedEvent(event, args) {
+  if (eventsCache[event]) {
+    for (const callback of eventsCache[event]) {
+      await callback(...args)
+    }
+  }
+}
+
+exports.onCreateNode = async (...args) => {
+  await runCachedEvent('onCreateNode', args)
+
+  const { node } = args[0]
 
   if (node.internal.mediaType !== 'text/yaml') {
     return
@@ -30,17 +43,22 @@ exports.onCreateNode = async (helpers, { plugins }) => {
     createContentDigest,
     createNodeId,
     loadNodeContent
-  } = helpers
+  } = args[0]
+
+  const {
+    plugins
+  } = args[1]
 
   function getSchema() {
     const types = []
 
-    for (let { resolve, pluginOptions } of plugins) {
-      const plugin = require(resolve)
-      const result = plugin(helpers, pluginOptions)
+    for (let { resolve, options } of plugins) {
+      const plugin = pluginsCache[resolve]
+      const result = plugin(...args, options)
+      const results = Array.isArray(result) ? result : [result]
 
       // The plugin must return a single type or an array of types
-      for (let { options, tag } of Array.isArray(result) ? result : [result]) {
+      for (const { options, tag } of results) {
         types.push(new jsYaml.Type(tag, options))
       }
     }
@@ -107,4 +125,34 @@ exports.onCreateNode = async (helpers, { plugins }) => {
 
     await linkNodes(resolvedContent, { type })
   }
+}
+
+exports.onPluginInit = async (...args) => {
+  const { plugins } = args[1]
+
+  for (const { resolve } of plugins) {
+    pluginsCache[resolve] = require(resolve)
+
+    try {
+      const events = require(`${resolve}/gatsby-node.js`)
+
+      for (const event in events) {
+        if (!eventsCache[event]) {
+          eventsCache[event] = []
+        }
+
+        eventsCache[event].push(events[event])
+      }
+    } catch (error) {
+      if (error.code !== 'MODULE_NOT_FOUND') {
+        throw error
+      }
+    }
+  }
+
+  await runCachedEvent('onPluginInit', args)
+}
+
+exports.onPreBootstrap = async (...args) => {
+  await runCachedEvent('onPreBootstrap', args)
 }
