@@ -14,5 +14,9 @@
   ],
   "dependencies": {
     "js-yaml": "^4.1.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^4.0.0",
+    "gatsby-transformer-yaml-full": "^4.0.0"
   }
 }

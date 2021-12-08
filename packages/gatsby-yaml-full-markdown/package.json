@@ -14,5 +14,9 @@
   ],
   "dependencies": {
     "is-plain-object": "^5.0.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^4.0.0",
+    "gatsby-transformer-yaml-full": "^4.0.0"
   }
 }
