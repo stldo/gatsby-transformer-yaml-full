@@ -69,13 +69,13 @@ exports.onCreateNode = async (...args) => {
   }
 
   async function linkNodes(content, { type = '', index = 0 }) {
-    const id = 'id' in content
-      ? content.id
-      : createNodeId(`${node.id}:${index} >>> YAML`)
+    if ('id' in content) {
+      content.yamlId = content.id
+    }
 
     const child = {
       ...content,
-      id,
+      id: createNodeId(`${node.id}:${index} >>> YAML`),
       children: [],
       parent: node.id,
       internal: {
