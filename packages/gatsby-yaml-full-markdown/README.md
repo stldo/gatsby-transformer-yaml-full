@@ -1,6 +1,7 @@
 # gatsby-yaml-full-markdown
 
-Plugin for `gatsby-transformer-yaml-full` to convert strings to Markdown nodes.
+Plugin for `gatsby-transformer-yaml-full` to convert Markdown fields to HTML
+using remark and remark-html.
 
 ## Install
 
@@ -20,7 +21,12 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: 'gatsby-yaml-full-markdown'
+            resolve: 'gatsby-yaml-full-markdown',
+            options: {
+              remarkHtml: {
+                // remark-html options
+              }
+            }
           }
         ],
       },
@@ -32,13 +38,7 @@ module.exports = {
 
 ## Usage
 
-Using the `!markdown` tag before a string converts the field to a Markdown media
-type node. If the string is a file path, the file content will be used. Use a
-Markdown plugin like `gatsby-transformer-remark` to transform the nodes.
-
-### Example
-
-#### Markdown file
+### Markdown file
 
 ```markdown
 
@@ -49,7 +49,7 @@ Markdown plugin like `gatsby-transformer-remark` to transform the nodes.
 File content.
 ```
 
-#### YAML file
+### YAML file
 
 ```yaml
 # post.yaml
@@ -62,30 +62,14 @@ content: !markdown |
 file: !markdown file.md
 ```
 
-#### Result
+### Result
 
 ```javascript
 data: {
   contentYaml: {
     title: 'Blog post',
-    content: {
-      internal: {
-        content: '## Heading\n\nArticle content.\n',
-        mediaType: 'text/markdown',
-        type: 'YamlMarkdown',
-        // ...
-      },
-      // ...
-    },
-    file: {
-      internal: {
-        content: '\n[//]: # \"file.md\"\n\n# Title\n\nFile content.\n',
-        mediaType: 'text/markdown',
-        type: 'YamlMarkdown',
-        // ...
-      },
-      // ...
-    }
+    content: '<h2>Heading</h2>\n<p>Article content.</p>\n',
+    file: '<h1>Title</h1>\n<p>File content.</p>\n'
   }
 }
 ```
