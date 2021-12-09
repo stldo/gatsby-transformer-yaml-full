@@ -1,229 +1,170 @@
 # gatsby-transformer-yaml-full
 
-YAML parser with support for custom types and multiple documents.
+YAML parser with support for custom tags and multiple document sources.
 
 ## Install
 
-```bash
+```sh
 $ npm install gatsby-transformer-yaml-full
 ```
 
-## Configure
+Enable the plugin in `gatsby-config.js`:
 
-### Using with gatsby-source-filesystem
-
-```javascript
-// gatsby-config.js
-
+```js
 module.exports = {
   plugins: [
     'gatsby-transformer-yaml-full',
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        path: './content', // Path to your .yaml (or .yml) files
-      },
-    },
-  ],
+    // {
+    //   resolve: 'gatsby-source-filesystem',
+    //   options: {
+    //     path: './content', // Folder containing YAML files
+    //   }
+    // }
+  ]
 }
 ```
 
-__Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
-`gatsby-source-filesystem`.
-
-### Enable custom types with plugins
-
-You can extend the parser functionality with plugins (e.g.
-[gatsby-yaml-full-markdown][1]).
-
-```javascript
-// gatsby-config.js
-
-module.exports = {
-  plugins: [
-    {
-      resolve: 'gatsby-transformer-yaml-full',
-      options: {
-        plugins: [
-          'gatsby-yaml-full-markdown', // Enable !markdown tags
-        ],
-      },
-    },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        path: './content',
-      },
-    },
-  ],
-}
-```
-
-## Options
-
-### plugins
-
-Default: `[]`. Type: `Array`.
-
-Enable specific YAML types (e.g. `gatsby-yaml-full-import` or
-`gatsby-yaml-full-markdown`)
+> __Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
+> `gatsby-source-filesystem` in the example above.
 
 ## Usage
 
-You can organize your data as multiple documents in individual files or as
-single documents spread across multiple files:
+You can organize your data as multiple documents, with all documents inside a
+single file, or as single documents, with a single document per file:
 
 - __Multiple Documents:__ each file represents a collection and each document
-represents a record
+represents a record;
 - __Single Document:__ each folder represents a collection and each file
-represents a record
+represents a record.
 
 ### Multiple documents
 
 Convert each document inside a file into a node. The node type is based on the
 file name.
 
-#### YAML file
+— The following `./collection.yaml` file:
 
 ```yaml
-# collection.yaml
-
+---
 character: a
 number: 1
 
 ---
-
 character: b
 number: 2
-
----
-
-character: c
-number: 3
 ```
 
-#### GraphQL query
+— Will return:
 
-```graphql
+```js
 {
-  allCollectionYaml {
-    edges {
-      node {
-        character
-        number
-      }
+  data: {
+    allCollectionYaml: {
+      nodes: [
+        {
+          character: 'a',
+          number: 1
+        },
+        {
+          character: 'b',
+          number: 2
+        }
+      ]
     }
   }
 }
 ```
 
-#### Returning object
+— With the following query:
 
-```javascript
-{
-  allCollectionYaml: {
-    edges: [
-      {
-        node: {
-          character: 'a',
-          number: 1,
-        },
-      },
-      {
-        node: {
-          character: 'b',
-          number: 2,
-        },
-      },
-      {
-        node: {
-          character: 'c',
-          number: 3,
-        },
-      },
-    ]
+```graphql
+query {
+  allCollectionYaml {
+    nodes
+      character
+      number
+    }
   }
 }
 ```
 
-### Single Document
+### Single document
 
 Convert each file inside a directory into a node. The node type is based on the
 directory name.
 
-#### Directory structure
+— The following directory structure:
 
 ```
 posts/
   blog-post.yaml
   hello-world.yaml
-  new-post.yaml
 ```
 
-#### YAML files
+— With `./posts/blog-post.yaml` and `./posts/hello-world.yaml` files, respectively:
 
 ```yaml
-# posts/blog-post.yaml
-
 title: Blog post
 ```
 
 ```yaml
-# posts/hello-world.yaml
-
 title: Hello, world!
 ```
 
-```yaml
-# posts/new-post.yaml
+— Will return:
 
-title: New post
-```
-
-#### GraphQL query
-
-```graphql
+```js
 {
-  allPostsYaml {
-    edges {
-      node {
-        title
-      }
+  data: {
+    allCollectionYaml: {
+      nodes: [
+        {
+          title: 'Blog post'
+        },
+        {
+          title: 'Hello, world!'
+        }
+      ]
     }
   }
 }
 ```
 
-#### Returning object
+— With the following query:
 
-```javascript
-{
-  allPostsYaml: {
-    edges: [
-      {
-        node: {
-          title: 'Blog post',
-        },
-      },
-      {
-        node: {
-          title: 'Hello, world!',
-        },
-      },
-      {
-        node: {
-          title: 'New post',
-        },
-      },
-    ]
+```graphql
+query {
+  allPostsYaml {
+    nodes
+      title
+    }
   }
 }
 ```
 
-### Type plugins
+### Enable custom tags with plugins
 
-You can extend the parser funcionality with plugins. Enabling
-`gatsby-yaml-full-markdown` plugin, the following document:
+With plugins, specific YAML tags can be enabled and processed.
+
+#### Example
+
+— With `gatsby-yaml-full-markdown` plugin activated:
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-transformer-yaml-full',
+      options: {
+        plugins: ['gatsby-yaml-full-markdown']
+      }
+    }
+    // ...
+  ]
+}
+```
+
+— Using a `!markdown` tag:
 
 ```yaml
 title: Blog post
@@ -233,16 +174,41 @@ content: !markdown |
   Article content.
 ```
 
-Would return:
+— Will return:
 
-```javascript
+```js
 {
   title: 'Blog post',
-  content: '<h2>Heading</h2>\n<p>Article content.</p>\n',
+  content: '<h2>Heading</h2>\n<p>Article content.</p>\n'
 }
 ```
 
-### Writing plugins
+## Configure
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-transformer-yaml-full',
+      // options: {
+      //   plugins: [
+      //     // ...gatsby-transformer-yaml-full plugins
+      //   ]
+      // }
+    }
+    // ...
+  ]
+}
+```
+
+### plugins
+
+Type: `Array`. Default: `[]`.
+
+Enable custom YAML tags (e.g. `gatsby-yaml-full-import`,
+`gatsby-yaml-full-markdown`, etc.).
+
+## Writing plugins
 
 The plugin should return a function, which should return an object with the
 following properties:

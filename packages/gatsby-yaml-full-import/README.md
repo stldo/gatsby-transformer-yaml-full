@@ -1,89 +1,107 @@
 # gatsby-yaml-full-import
 
-Plugin for `gatsby-transformer-yaml-full` to enable YAML files importing using
-`!import` tag.
+Plugin for `gatsby-transformer-yaml-full` to enable import of other YAML files
+or fields using `!import` tag.
 
 ## Install
 
-```bash
+```sh
 $ npm install gatsby-yaml-full-import gatsby-transformer-yaml-full
 ```
 
-## Configure
+Enable the plugin in `gatsby-config.js`:
 
-```javascript
-// gatsby-config.js
-
+```js
 module.exports = {
   plugins: [
     {
       resolve: 'gatsby-transformer-yaml-full',
       options: {
-        plugins: [
-          'gatsby-yaml-full-import'
-        ],
-      },
-    },
-    // ...
-  ],
+        plugins: ['gatsby-yaml-full-import']
+      }
+    }
+  ]
 }
 ```
 
 ## Usage
 
-Use the `!import` tag to import the content of a YAML file inside a property.
+### Import all fields from a file
 
-### Importing YAML data from another file
-
-#### YAML files
+— The following `./index.yaml` and `./post.yaml` files, respectively:
 
 ```yaml
-# post.yaml
-
-title: Post title
-```
-
-```yaml
-# index.yaml
-
+---
 importedPost: !import ./post.yaml
 ```
 
-#### Returning object
+```yaml
+title: Post title
+```
 
-```javascript
+ — Will return:
+
+```js
 {
-  importedPost: {
-    title: 'Post title'
+  data: {
+    indexYaml: {
+      importedPost: {
+        title: 'Post title'
+      }
+    }
   }
 }
 ```
 
-### Importing a specific field
+— With the following query:
 
-Use an exclamation mark (`!`) to separate file name from field names.
+```graphql
+query {
+  indexYaml {
+    importedPost {
+      title
+    }
+  }
+}
+```
 
-#### YAML files
+### Import a specific field from a file
+
+An exclamation mark (`!`) separates the file name from the field query. The
+field query supports array indexes too.
+
+— The following `./index.yaml` and `./post.yaml` files, respectively:
 
 ```yaml
-# post.yaml
+---
+importedAuthorName: !import ./post.yaml!authors.1.name
+```
 
+```yaml
 authors:
 - name: John Doe
 - name: John Q.
 ```
 
-```yaml
-# index.yaml
+ — Will return:
 
-importedAuthorName: !import ./post.yaml!authors.0.name
+```js
+{
+  data: {
+    indexYaml: {
+      importedAuthorName: 'John Q.'
+    }
+  }
+}
 ```
 
-#### Returning object
+— With the following query:
 
-```javascript
-{
-  importedAuthorName: 'John Doe'
+```graphql
+query {
+  indexYaml {
+    importedAuthorName
+  }
 }
 ```
 

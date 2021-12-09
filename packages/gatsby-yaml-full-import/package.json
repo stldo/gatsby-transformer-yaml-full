@@ -1,6 +1,6 @@
 {
   "name": "gatsby-yaml-full-import",
-  "description": "Plugin to enable YAML files importing using !import tag",
+  "description": "Import other YAML files or fields using !import tag",
   "version": "4.0.1",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
