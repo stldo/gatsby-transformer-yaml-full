@@ -13,7 +13,9 @@
     "yaml"
   ],
   "dependencies": {
-    "is-plain-object": "^5.0.0"
+    "remark-html": "^13.0.2",
+    "remark-parse": "^9.0.0",
+    "unified": "^9.2.2"
   },
   "peerDependencies": {
     "gatsby": "^4.0.0",
