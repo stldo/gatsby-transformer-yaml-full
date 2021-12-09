@@ -183,6 +183,12 @@ content: !markdown |
 }
 ```
 
+### `id` and `yamlId`
+
+To keep consistency with the official `gatsby-transformer-yaml` plugin — and
+because `id` is a reserved key in Gatsby —, if a YAML file contains an `id`
+field, it'll be renamed to `yamlId`.
+
 ## Configure
 
 ```js
