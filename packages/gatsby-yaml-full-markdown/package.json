@@ -1,6 +1,6 @@
 {
   "name": "gatsby-yaml-full-markdown",
-  "description": "Convert strings to Markdown nodes",
+  "description": "Markdown to HTML conversion using !markdown tag",
   "version": "4.0.1",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",

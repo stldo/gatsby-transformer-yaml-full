@@ -8,7 +8,7 @@ const NEWLINE_REGEXP = /\n|\r/
 
 let remark
 
-module.exports = ({ node }, _, options) => {
+module.exports = ({ node }, _, options = {}) => {
   return {
     tag: '!markdown',
     options: {
@@ -31,7 +31,7 @@ module.exports = ({ node }, _, options) => {
         if (!remark) {
           remark = unified()
             .use(remarkParse)
-            .use(remarkHtml, options.remarkHtml)
+            .use(remarkHtml, options.remarkHtml || {})
         }
 
         return String(await remark.process(content))

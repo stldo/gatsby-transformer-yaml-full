@@ -1,6 +1,6 @@
 {
   "name": "gatsby-transformer-yaml-full",
-  "description": "YAML parser with support for custom types and multiple documents",
+  "description": "YAML parser with support for custom tags and multiple document sources",
   "version": "4.0.1",
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT",
