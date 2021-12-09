@@ -5,9 +5,6 @@ const path = require('path')
 const CAMEL_CASE_REGEXP = /(?:^|[^a-z0-9]+)([a-z0-9])|[^a-z0-9]+$/g
 const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
 
-const eventsCache = {}
-const pluginsCache = {}
-
 function camelCase(string) {
   return string.toLowerCase().replace(CAMEL_CASE_REGEXP, (_, char) => {
     return char !== undefined ? char.toUpperCase() : ''
@@ -21,17 +18,7 @@ function loadYaml(content, schema) {
     : jsYaml.load(content, { schema })
 }
 
-async function runCachedEvent(event, args) {
-  if (eventsCache[event]) {
-    for (const callback of eventsCache[event]) {
-      await callback(...args)
-    }
-  }
-}
-
 exports.onCreateNode = async (...args) => {
-  await runCachedEvent('onCreateNode', args)
-
   const { node } = args[0]
 
   if (node.internal.mediaType !== 'text/yaml') {
@@ -53,7 +40,7 @@ exports.onCreateNode = async (...args) => {
     const types = []
 
     for (let { resolve, options } of plugins) {
-      const plugin = pluginsCache[resolve]
+      const plugin = require(resolve)
       const result = plugin(...args, options)
       const results = Array.isArray(result) ? result : [result]
 
@@ -131,17 +118,11 @@ exports.onPluginInit = async (...args) => {
   const { plugins } = args[1]
 
   for (const { resolve } of plugins) {
-    pluginsCache[resolve] = require(resolve)
-
     try {
-      const events = require(`${resolve}/gatsby-node.js`)
+      const { onPluginInit } = require(`${resolve}/gatsby-node.js`)
 
-      for (const event in events) {
-        if (!eventsCache[event]) {
-          eventsCache[event] = []
-        }
-
-        eventsCache[event].push(events[event])
+      if (onPluginInit) {
+        await onPluginInit(...args)
       }
     } catch (error) {
       if (error.code !== 'MODULE_NOT_FOUND') {
@@ -149,10 +130,4 @@ exports.onPluginInit = async (...args) => {
       }
     }
   }
-
-  await runCachedEvent('onPluginInit', args)
-}
-
-exports.onPreBootstrap = async (...args) => {
-  await runCachedEvent('onPreBootstrap', args)
 }
