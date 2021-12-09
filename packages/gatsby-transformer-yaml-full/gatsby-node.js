@@ -5,13 +5,13 @@ const path = require('path')
 const CAMEL_CASE_REGEXP = /(?:^|[^a-z0-9]+)([a-z0-9])|[^a-z0-9]+$/g
 const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
 
-function camelCase(string) {
+function camelCase (string) {
   return string.toLowerCase().replace(CAMEL_CASE_REGEXP, (_, char) => {
     return char !== undefined ? char.toUpperCase() : ''
   })
 }
 
-function loadYaml(content, schema) {
+function loadYaml (content, schema) {
   content += '\n'
   return content.search(MULTI_DOCUMENT_YAML) !== -1
     ? jsYaml.loadAll(content, { schema })
@@ -36,10 +36,10 @@ exports.onCreateNode = async (...args) => {
     plugins
   } = args[1]
 
-  function getSchema() {
+  function getSchema () {
     const types = []
 
-    for (let { resolve, options } of plugins) {
+    for (const { resolve, options } of plugins) {
       const plugin = require(resolve)
       const result = plugin(...args, options)
       const results = Array.isArray(result) ? result : [result]
@@ -55,7 +55,7 @@ exports.onCreateNode = async (...args) => {
       : jsYaml.DEFAULT_SCHEMA
   }
 
-  async function linkNodes(content, { type = '', index = 0 }) {
+  async function linkNodes (content, { type = '', index = 0 }) {
     if ('id' in content) {
       content.yamlId = content.id
     }
@@ -75,7 +75,7 @@ exports.onCreateNode = async (...args) => {
     createParentChildLink({ parent: node, child })
   }
 
-  async function resolveContent(content) {
+  async function resolveContent (content) {
     content = await content
 
     if (Array.isArray(content)) {
@@ -98,7 +98,7 @@ exports.onCreateNode = async (...args) => {
   const yaml = loadYaml(nodeContent, getSchema())
 
   if (Array.isArray(yaml)) {
-    for (let [index, content] of yaml.entries()) {
+    for (const [index, content] of yaml.entries()) {
       if (isPlainObject(content)) {
         const type = `${node.relativeDirectory} ${node.name}`
         const resolvedContent = await resolveContent(content)
