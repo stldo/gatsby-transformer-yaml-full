@@ -1,11 +1,17 @@
 {
   "private": true,
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
     "lerna": "^4.0.0"
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
+    "lint": "eslint --cache --ext js ./packages",
     "publish": "lerna publish",
     "version": "lerna version"
   }

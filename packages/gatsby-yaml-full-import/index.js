@@ -37,6 +37,7 @@ module.exports = helpers => ({
       let yamltagMatch
 
       /* Match YAML tags and return their fields as strings */
+      // eslint-disable-next-line no-cond-assign
       while (yamltagMatch = YAML_TAGS.exec(yaml)) {
         types.push(new jsYaml.Type(yamltagMatch[1], { kind: 'scalar' }))
       }
