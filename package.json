@@ -1,5 +1,12 @@
 {
   "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
+    "lint": "eslint --cache --ext js ./packages",
+    "publish": "lerna publish",
+    "version": "lerna version"
+  },
   "devDependencies": {
     "eslint": "^8.7.0",
     "eslint-config-standard": "^17.0.0-0",
@@ -7,12 +14,5 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "lerna": "^4.0.0"
-  },
-  "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
-    "lint": "eslint --cache --ext js ./packages",
-    "publish": "lerna publish",
-    "version": "lerna version"
   }
 }
