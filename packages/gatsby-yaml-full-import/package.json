@@ -1,9 +1,7 @@
 {
   "name": "gatsby-yaml-full-import",
-  "description": "Import other YAML files or fields using !import tag",
   "version": "4.0.3",
-  "author": "stldo (https://github.com/stldo)",
-  "license": "MIT",
+  "description": "Import other YAML files or fields using !import tag",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import#readme",
   "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import",
   "keywords": [
@@ -18,5 +16,7 @@
   "peerDependencies": {
     "gatsby": "^4.0.0",
     "gatsby-transformer-yaml-full": "^4.0.0"
-  }
+  },
+  "author": "stldo (https://github.com/stldo)",
+  "license": "MIT"
 }
