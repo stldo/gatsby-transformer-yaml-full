@@ -1,33 +1,32 @@
-# gatsby-transformer-yaml-full
+# gatsby-transformer-yaml-full [![npm][1]][2]
 
 YAML parser with support for custom tags and multiple document sources.
 
-## Install
+## Installation
 
 ```sh
-$ npm install gatsby-transformer-yaml-full
+npm install gatsby-transformer-yaml-full
 ```
 
-Enable the plugin in `gatsby-config.js`:
+## Usage
+
+> Note: `gatsby-transformer-yaml-full` requires a source plugin.
 
 ```js
+/* gatsby-config.js */
+
 module.exports = {
   plugins: [
     'gatsby-transformer-yaml-full',
-    // {
-    //   resolve: 'gatsby-source-filesystem',
-    //   options: {
-    //     path: './content', // Folder containing YAML files
-    //   }
-    // }
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        /* gatsby-source-filesystem options here */
+      }
+    }
   ]
 }
 ```
-
-> __Note:__ `gatsby-transformer-yaml-full` requires a source plugin, like
-> `gatsby-source-filesystem` in the example above.
-
-## Usage
 
 You can organize your data as multiple documents, with all documents inside a
 single file, or as single documents, with a single document per file:
@@ -42,7 +41,7 @@ represents a record.
 Convert each document inside a file into a node. The node type is based on the
 file name.
 
-— The following `./collection.yaml` file:
+The `./collection.yaml` file below:
 
 ```yaml
 ---
@@ -54,7 +53,7 @@ character: b
 number: 2
 ```
 
-— Will return:
+Will return:
 
 ```js
 {
@@ -75,7 +74,7 @@ number: 2
 }
 ```
 
-— With the following query:
+With the following query:
 
 ```graphql
 query {
@@ -93,7 +92,7 @@ query {
 Convert each file inside a directory into a node. The node type is based on the
 directory name.
 
-— The following directory structure:
+The following directory structure:
 
 ```
 posts/
@@ -101,7 +100,8 @@ posts/
   hello-world.yaml
 ```
 
-— With `./posts/blog-post.yaml` and `./posts/hello-world.yaml` files, respectively:
+With `./posts/blog-post.yaml` and `./posts/hello-world.yaml` files,
+respectively:
 
 ```yaml
 title: Blog post
@@ -111,7 +111,7 @@ title: Blog post
 title: Hello, world!
 ```
 
-— Will return:
+Will return:
 
 ```js
 {
@@ -130,7 +130,7 @@ title: Hello, world!
 }
 ```
 
-— With the following query:
+With the following query:
 
 ```graphql
 query {
@@ -148,9 +148,11 @@ With plugins, specific YAML tags can be enabled and processed.
 
 #### Example
 
-— With `gatsby-yaml-full-markdown` plugin activated:
+With `gatsby-yaml-full-markdown` plugin activated:
 
 ```js
+/* gatsby-config.js */
+
 module.exports = {
   plugins: [
     {
@@ -164,7 +166,7 @@ module.exports = {
 }
 ```
 
-— Using a `!markdown` tag:
+Using a `!markdown` tag:
 
 ```yaml
 title: Blog post
@@ -174,7 +176,7 @@ content: !markdown |
   Article content.
 ```
 
-— Will return:
+Will return:
 
 ```js
 {
@@ -183,29 +185,7 @@ content: !markdown |
 }
 ```
 
-### `id` and `yamlId`
-
-To keep consistency with the official `gatsby-transformer-yaml` plugin — and
-because `id` is a reserved key in Gatsby —, if a YAML file contains an `id`
-field, it'll be renamed to `yamlId`.
-
-## Configure
-
-```js
-module.exports = {
-  plugins: [
-    {
-      resolve: 'gatsby-transformer-yaml-full',
-      // options: {
-      //   plugins: [
-      //     // ...gatsby-transformer-yaml-full plugins
-      //   ]
-      // }
-    }
-    // ...
-  ]
-}
-```
+## Options
 
 ### plugins
 
@@ -214,13 +194,19 @@ Type: `Array`. Default: `[]`.
 Enable custom YAML tags (e.g. `gatsby-yaml-full-import`,
 `gatsby-yaml-full-markdown`, etc.).
 
+## `id` and `yamlId`
+
+To keep consistency with the official `gatsby-transformer-yaml` plugin, if a
+YAML file contains an `id` field, it'll be renamed to `yamlId` — `id` is a
+reserved key in Gatsby.
+
 ## Writing plugins
 
 The plugin should return a function, which should return an object with the
 following properties:
 
 - __tag _(string)_:__ the tag of the new type (e.g. `!import`, `!markdown`)
-- __options:__ passed to JS-YAML [Type][2] constructor
+- __options:__ passed to JS-YAML [Type][3] constructor
 
 The first argument of the function will be the `helpers` object received from
 Gatsby on `exports.onCreateNode`. The second will be the plugin options object
@@ -241,13 +227,14 @@ module.exports = function ({ node }, pluginOptions) {
 ```
 
 More information about creating local plugins, specific to your project, can be
-found on [Gatsby documentation][3].
+found on [Gatsby documentation][4].
 
 ## License
 
 [The MIT License][license]
 
-[1]: https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown
-[2]: https://github.com/nodeca/js-yaml/blob/master/lib/type.js
-[3]: https://www.gatsbyjs.com/docs/creating-a-local-plugin
+[1]: https://img.shields.io/npm/v/gatsby-transformer-yaml-full
+[2]: https://www.npmjs.com/package/gatsby-transformer-yaml-full
+[3]: https://github.com/nodeca/js-yaml/blob/master/lib/type.js
+[4]: https://www.gatsbyjs.com/docs/creating-a-local-plugin
 [license]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
