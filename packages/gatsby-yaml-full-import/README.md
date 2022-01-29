@@ -1,17 +1,19 @@
-# gatsby-yaml-full-import
+# gatsby-yaml-full-import [![npm][1]][2]
 
 Plugin for `gatsby-transformer-yaml-full` to enable import of other YAML files
 or fields using `!import` tag.
 
-## Install
+## Installation
 
 ```sh
-$ npm install gatsby-yaml-full-import gatsby-transformer-yaml-full
+npm install gatsby-yaml-full-import gatsby-transformer-yaml-full
 ```
 
-Enable the plugin in `gatsby-config.js`:
+## Usage
 
 ```js
+/* gatsby-config.js */
+
 module.exports = {
   plugins: [
     {
@@ -24,11 +26,9 @@ module.exports = {
 }
 ```
 
-## Usage
-
 ### Import all fields from a file
 
-— The following `./index.yaml` and `./post.yaml` files, respectively:
+The following `./index.yaml` and `./post.yaml` files, respectively:
 
 ```yaml
 ---
@@ -39,7 +39,7 @@ importedPost: !import ./post.yaml
 title: Post title
 ```
 
- — Will return:
+Will return:
 
 ```js
 {
@@ -53,7 +53,7 @@ title: Post title
 }
 ```
 
-— With the following query:
+With the following query:
 
 ```graphql
 query {
@@ -70,7 +70,7 @@ query {
 An exclamation mark (`!`) separates the file name from the field query. The
 field query supports array indexes too.
 
-— The following `./index.yaml` and `./post.yaml` files, respectively:
+The following `./index.yaml` and `./post.yaml` files, respectively:
 
 ```yaml
 ---
@@ -83,7 +83,7 @@ authors:
 - name: John Q.
 ```
 
- — Will return:
+Will return:
 
 ```js
 {
@@ -95,7 +95,7 @@ authors:
 }
 ```
 
-— With the following query:
+With the following query:
 
 ```graphql
 query {
@@ -109,4 +109,6 @@ query {
 
 [The MIT License][license]
 
+[1]: https://img.shields.io/npm/v/gatsby-yaml-full-import
+[2]: https://www.npmjs.com/package/gatsby-yaml-full-import
 [license]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
