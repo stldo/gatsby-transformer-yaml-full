@@ -1,10 +1,14 @@
 # gatsby-yaml-full-markdown [![npm][1]][2]
 
-> ⚠️ __Warning__: see [Migrating from < 4.0.0][3] if you are coming from older
+> ⚠️ __Warning__: the `plain` option will be deprecated in the future and this
+> plugin will always return an object — the equivalent of setting `plain` to
+> `true`. Find more info about this option [here][3].
+
+> ⚠️ __Warning__: see [Migrating from < 4.0.0][4] if you are coming from older
 > versions.
 
 Plugin for `gatsby-transformer-yaml-full` to enable Markdown to HTML conversion
-using `!markdown` tag. The conversion is handled by [remark][4].
+using `!markdown` tag. The conversion is handled by [remark][5].
 
 ## Installation
 
@@ -88,13 +92,59 @@ query {
 
 ## Options
 
+### plain
+
+Type: `boolean`. Default: `false`.
+
+Returns plain text (without markups) along with HTML. When this option is
+enabled, the markdown node will return an object — instead of a string with HTML
+markup — containing two properties, `html` and `plain`.
+
+The following `./post.yaml`:
+
+```yaml
+---
+content: !markdown |
+  ## Heading
+
+  Article content.
+```
+
+Will return:
+
+```js
+{
+  data: {
+    postYaml: {
+      content: {
+        html: '<h2>Heading</h2>\n<p>Article content.</p>\n',
+        plain: 'Heading\n\nArticle content.\n'
+      },
+    }
+  }
+}
+```
+
+With the following query:
+
+```graphql
+query {
+  postYaml {
+    content {
+      html
+      plain
+    }
+  }
+}
+```
+
 ### remarkHtml
 
 Type: `object`. Default: `{}`.
 
 `remark-html` can be configured through `remarkHtml` option —  i.e. if you want
 to allow dangerous raw HTML in the output, set the `sanitize` option to `false`.
-More info about `remark-html` options can be found [here][5].
+More info about `remark-html` options can be found [here][6].
 
 ## Migrating from `< 4.0.0`
 
@@ -110,7 +160,8 @@ HTML.
 
 [1]: https://img.shields.io/npm/v/gatsby-yaml-full-markdown
 [2]: https://www.npmjs.com/package/gatsby-yaml-full-markdown
-[3]: #migrating-from--400
-[4]: https://github.com/remarkjs/remark
-[5]: https://github.com/remarkjs/remark-html#options
+[3]: #plain
+[4]: #migrating-from--400
+[5]: https://github.com/remarkjs/remark
+[6]: https://github.com/remarkjs/remark-html#options
 [license]: https://github.com/stldo/gatsby-transformer-yaml-full/blob/master/LICENSE
