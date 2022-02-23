@@ -13,6 +13,8 @@
   "dependencies": {
     "remark-html": "^13.0.2",
     "remark-parse": "^9.0.0",
+    "remark-stringify": "^9.0.1",
+    "strip-markdown": "^4.2.0",
     "unified": "^9.2.2"
   },
   "peerDependencies": {

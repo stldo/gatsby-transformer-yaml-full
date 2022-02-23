@@ -2,13 +2,15 @@ const { readFile } = require('fs/promises')
 const path = require('path')
 const remarkHtml = require('remark-html')
 const remarkParse = require('remark-parse')
+const remarkStringify = require('remark-stringify')
+const stripMarkdown = require('strip-markdown')
 const unified = require('unified')
 
 const NEWLINE_REGEXP = /\n|\r/
 
-let remark
+const remark = { html: null }
 
-module.exports = ({ node }, _, options = {}) => {
+module.exports = ({ node, reporter }, _, options = {}) => {
   return {
     tag: '!markdown',
     options: {
@@ -28,13 +30,33 @@ module.exports = ({ node }, _, options = {}) => {
             })
         }
 
-        if (!remark) {
-          remark = unified()
+        if (!remark.html) {
+          remark.html = unified()
             .use(remarkParse)
             .use(remarkHtml, options.remarkHtml || {})
+
+          if (!options.plain) {
+            reporter.warn(
+              'Using gatsby-yaml-full-markdown with the "plain" option set ' +
+              'to "false" will be deprecated. Find more info in the plugin ' +
+              'documentation.'
+            )
+          }
         }
 
-        return String(await remark.process(content))
+        if (!options.plain) {
+          return String(await remark.html.process(content))
+        } else if (!remark.plain) {
+          remark.plain = unified()
+            .use(remarkParse)
+            .use(remarkStringify)
+            .use(stripMarkdown)
+        }
+
+        return {
+          html: String(await remark.html.process(content)),
+          plain: String(await remark.plain.process(content))
+        }
       }
     }
   }
