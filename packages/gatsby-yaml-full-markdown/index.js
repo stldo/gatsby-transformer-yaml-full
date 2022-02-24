@@ -45,7 +45,7 @@ module.exports = ({ node, reporter }, _, options = {}) => {
         }
 
         if (!options.plain) {
-          return String(await remark.html.process(content))
+          return `${await remark.html.process(content)}`
         } else if (!remark.plain) {
           remark.plain = unified()
             .use(remarkParse)
@@ -54,8 +54,8 @@ module.exports = ({ node, reporter }, _, options = {}) => {
         }
 
         return {
-          html: String(await remark.html.process(content)),
-          plain: String(await remark.plain.process(content))
+          html: `${await remark.html.process(content)}`,
+          plain: `${await remark.plain.process(content)}`
         }
       }
     }
