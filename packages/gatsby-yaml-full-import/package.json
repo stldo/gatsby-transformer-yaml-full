@@ -1,6 +1,6 @@
 {
   "name": "gatsby-yaml-full-import",
-  "version": "4.0.5",
+  "version": "5.0.0",
   "description": "Import other YAML files or fields using !import tag",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import#readme",
   "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-import",
