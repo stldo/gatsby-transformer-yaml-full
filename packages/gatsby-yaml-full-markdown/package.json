@@ -1,6 +1,6 @@
 {
   "name": "gatsby-yaml-full-markdown",
-  "version": "4.1.1",
+  "version": "5.0.0",
   "description": "Markdown to HTML conversion using !markdown tag",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown#readme",
   "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-yaml-full-markdown",
