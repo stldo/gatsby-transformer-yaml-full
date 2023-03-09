@@ -14,8 +14,8 @@
     "js-yaml": "^4.1.0"
   },
   "peerDependencies": {
-    "gatsby": "^4.0.0",
-    "gatsby-transformer-yaml-full": "^4.0.0"
+    "gatsby": "^5.0.0",
+    "gatsby-transformer-yaml-full": "^5.0.0"
   },
   "author": "stldo (https://github.com/stldo)",
   "license": "MIT"
