@@ -8,9 +8,9 @@ const unified = require('unified')
 
 const NEWLINE_REGEXP = /\n|\r/
 
-const remark = { html: null }
+const remark = {}
 
-module.exports = ({ node, reporter }, _, options = {}) => {
+module.exports = ({ node }, _, options = {}) => {
   return {
     tag: '!markdown',
     options: {
@@ -34,19 +34,9 @@ module.exports = ({ node, reporter }, _, options = {}) => {
           remark.html = unified()
             .use(remarkParse)
             .use(remarkHtml, options.remarkHtml || {})
-
-          if (!options.plain) {
-            reporter.warn(
-              'Using gatsby-yaml-full-markdown with the "plain" option set ' +
-              'to "false" will be deprecated. Find more info in the plugin ' +
-              'documentation.'
-            )
-          }
         }
 
-        if (!options.plain) {
-          return `${await remark.html.process(content)}`
-        } else if (!remark.plain) {
+        if (!remark.plain) {
           remark.plain = unified()
             .use(remarkParse)
             .use(remarkStringify)
