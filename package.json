@@ -6,6 +6,7 @@
     "bootstrap": "lerna bootstrap",
     "outdated": "npm outdated && lerna exec --no-bail -- npm outdated",
     "lint": "eslint --cache --ext js ./packages",
+    "lint:fix": "eslint --fix --cache --ext js ./packages",
     "publish": "lerna publish --no-private",
     "version": "lerna version --no-private"
   },
