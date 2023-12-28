@@ -1,6 +1,6 @@
 {
   "name": "gatsby-transformer-yaml-full",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "YAML parser with support for custom tags and multiple document sources",
   "homepage": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-transformer-yaml-full#readme",
   "repository": "https://github.com/stldo/gatsby-transformer-yaml-full/tree/master/packages/gatsby-transformer-yaml-full",
