@@ -1,6 +1,7 @@
 const { isPlainObject } = require('is-plain-object')
 const jsYaml = require('js-yaml')
 const path = require('path')
+const _ = require('lodash')
 
 const CAMEL_CASE_REGEXP = /(?:^|[^a-z0-9]+)([a-z0-9])|[^a-z0-9]+$/g
 const MULTI_DOCUMENT_YAML = /^-{3}[ \t]*?($|[#!]|[|>][ \t]*?$)/m
@@ -54,25 +55,41 @@ exports.onCreateNode = async (...args) => {
       ? jsYaml.DEFAULT_SCHEMA.extend(types)
       : jsYaml.DEFAULT_SCHEMA
   }
-
-  async function linkNodes (content, { type = '', index = 0 }) {
+  async function linkNodes (
+    content,
+    {
+      generalType = null,
+      specificType = '',
+      index = 0
+    } = {}
+  ) {
     if ('id' in content) {
       content.yamlId = content.id
     }
 
-    const child = {
-      ...content,
-      id: createNodeId(`${node.id}:${index} >>> YAML`),
-      children: [],
-      parent: node.id,
-      internal: {
-        contentDigest: createContentDigest(content),
-        type: camelCase(`${type} Yaml`)
+    if (generalType) {
+      const generalChild = {
+        ...content,
+        id: createNodeId(`${node.id}:${index} >>> ${generalType}`),
+        internal: {
+          contentDigest: createContentDigest(content),
+          type: camelCase(`${generalType} Yaml`)
+        }
       }
+      await createNode(generalChild)
+      createParentChildLink({ parent: node, child: generalChild })
     }
 
-    await createNode(child)
-    createParentChildLink({ parent: node, child })
+    const specificChild = {
+      ...content,
+      id: createNodeId(`${node.id}:${index} >>> ${specificType}`),
+      internal: {
+        contentDigest: createContentDigest(content),
+        type: camelCase(`${specificType} Yaml`)
+      }
+    }
+    await createNode(specificChild)
+    createParentChildLink({ parent: node, child: specificChild })
   }
 
   async function resolveContent (content) {
@@ -94,23 +111,54 @@ exports.onCreateNode = async (...args) => {
     return content
   }
 
+  function getTypes (node) {
+    let instanceName = null
+    let directory = null
+    const fileName = node.name
+
+    const sourceInstanceName = node.sourceInstanceName
+    if (
+      sourceInstanceName && _.isString(sourceInstanceName) &&
+        sourceInstanceName !== '__PROGRAMMATIC__' &&
+        !_.isEmpty(sourceInstanceName)
+    ) {
+      instanceName = node.sourceInstanceName
+    }
+
+    const relativeDirectory = node.relativeDirectory
+    // eslint-disable-next-line max-len
+    if (
+      relativeDirectory &&
+      _.isString(relativeDirectory) &&
+      !_.isEmpty(relativeDirectory)
+    ) {
+      directory = relativeDirectory
+    }
+
+    if (_.isNull(directory)) {
+      directory = path.basename(node.dir)
+    }
+
+    const specificType = `${instanceName || directory || ''} ${fileName}`
+    const generalType = `${instanceName || directory || null}`
+    return { specificType, generalType }
+  }
+
   const nodeContent = await loadNodeContent(node)
   const yaml = loadYaml(nodeContent, getSchema())
 
   if (Array.isArray(yaml)) {
     for (const [index, content] of yaml.entries()) {
       if (isPlainObject(content)) {
-        const type = `${node.relativeDirectory} ${node.name}`
         const resolvedContent = await resolveContent(content)
-
-        await linkNodes(resolvedContent, { type, index })
+        const { generalType, specificType } = getTypes(node)
+        await linkNodes(resolvedContent, { generalType, specificType, index })
       }
     }
   } else if (isPlainObject(yaml)) {
-    const type = path.basename(node.dir)
     const resolvedContent = await resolveContent(yaml)
-
-    await linkNodes(resolvedContent, { type })
+    const { generalType, specificType } = getTypes(node)
+    await linkNodes(resolvedContent, { generalType, specificType })
   }
 }
 
